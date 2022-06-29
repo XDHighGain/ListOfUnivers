@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/www">
+    <LinearLayout
+        android:orientation="vertical"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linearLayout1">
+
+        <FrameLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/frameLayout1"
+            android:layout_marginBottom="0.0dp" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="0px"
+            android:minHeight="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout2">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/linearLayout3">
+                <EditText
+                    android:text="Country"
+                    android:textSize="18dp"
+                    android:gravity="center_horizontal|center"
+                    android:background="@color/material_grey_300"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:minWidth="100dp"
+                    android:id="@+id/editText12"
+                    
+                    android:layout_gravity="center" 
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:id="@+id/linearLayout4">
+                <Button
+                    android:text="Search"
+                    android:textSize="18dp"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button1"
+                    android:layout_marginLeft="0.0dp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <FrameLayout
+            android:minWidth="25px"
+            android:minHeight="5px"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/frameLayout5"
+            android:layout_marginBottom="0.0dp" />
+        <ListView
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView1" />
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
