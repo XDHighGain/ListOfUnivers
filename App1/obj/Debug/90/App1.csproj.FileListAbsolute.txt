@@ -273,3 +273,7 @@ C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\android\assets\System.Web.Ser
 C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\android\assets\System.Web.Services.pdb
 C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\android\assets\System.Xml.Linq.dll
 C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\android\assets\System.Xml.Linq.pdb
+C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\res\mipmap-hdpi\greyback.png
+C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\res\mipmap-hdpi\grey.png
+C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\res\mipmap-hdpi\ba.png
+C:\Users\Ravin\source\repos\App1\App1\obj\Debug\90\android\src\crc64a7a6b04b89628087\Details.java

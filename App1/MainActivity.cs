@@ -7,8 +7,12 @@ using Android.Runtime;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using Newtonsoft.Json;
+using Android.Content;
+using Android.Views;
+using Android.Views.InputMethods;
 
 namespace App1
 {
@@ -17,7 +21,8 @@ namespace App1
     {
         Button button1;
         EditText editText1;
-        EditText editText12; 
+        EditText editText12;
+        TextView textMesage;
         List<string> list;
         List<string> listOfUnivers = new List<string>();
         List<string> listOfCountry = new List<string>();
@@ -30,38 +35,27 @@ namespace App1
         TextView textCountry;
         TextView textWeb;
 
+        public InputMethodManager inputMethodManager;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
+
             button1 = FindViewById<Button>(Resource.Id.button1);
-            //editText1 = FindViewById<EditText>(Resource.Id.editText1);
             listView1 = FindViewById<ListView>(Resource.Id.listView1);
             editText12 = FindViewById<EditText>(Resource.Id.editText12);
+            textMesage = FindViewById<TextView>(Resource.Id.textMesage);
 
+            Window.SetSoftInputMode(SoftInput.StateHidden);
             listView1.ItemClick += GoToDetails;
             button1.Click += OnClickButton;
             editText12.Touch += TextViewTouched;
-            listView1.ItemClick += SelectedItem;
-
-            //list = new List<string> { "111", "222", "333" };
-            //listView1 = FindViewById<ListView>(Resource.Id.listView1);
-            //ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, list);
-            //listView1.Adapter = adapter;
-
-        }
-
-        public void SelectedItem(object sender, AdapterView.ItemClickEventArgs e)
-        {
-            
-            
         }
 
         public void GoToDetails(object sender, AdapterView.ItemClickEventArgs e)
         {
-
             SetContentView(Resource.Layout.content_main);
             selectedPos = e.Position;
             textCountry = FindViewById<TextView>(Resource.Id.textCountry);
@@ -76,29 +70,51 @@ namespace App1
 
         public void OnClickButton(object sender, EventArgs e)
         {
-            
-            //button1.Text = "ffff";
-            string json = new WebClient().DownloadString("http://universities.hipolabs.com/search?country=" + editText12.Text);
-
-            var p = JsonConvert.DeserializeObject<List<Uni>>(json);
-            foreach (var i in p)
+            listOfUnivers.Clear();
+            listOfCountry.Clear();
+            listOfWeb.Clear();
+            textMesage.Text = "";
+            if (editText12.Text != "")
             {
-                listOfUnivers.Add(i.name);
-                listOfCountry.Add(i.country);
-                listOfWeb.Add(i.web_pages[0]);
+                string json = new WebClient().DownloadString("http://universities.hipolabs.com/search?country=" + editText12.Text);
+                var p = JsonConvert.DeserializeObject<List<Uni>>(json);
+                foreach (var i in p)
+                {
+                    listOfUnivers.Add(i.name);
+                    listOfCountry.Add(i.country);
+                    listOfWeb.Add(i.web_pages[0]);
+                }
+
+                if (listOfUnivers.Count > 0)
+                {
+                    listOfUnivers.Sort();
+                    listOfCountry.Sort();
+                    listOfWeb.Sort();
+                    ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, listOfUnivers);
+                    listView1.Adapter = adapter;
+                }
+                else
+                {
+                    textMesage.Text = "Check spelling";
+                }
+
+
             }
-            listOfUnivers.Sort();
-            listOfCountry.Sort();
-            listOfWeb.Sort();
+            else
+            {
+                textMesage.Text = "No result, choose any country";
+            }
 
-
-            ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, listOfUnivers);
-            listView1.Adapter = adapter;
         }
 
         public void TextViewTouched(object sender, EventArgs e)
         {
+
             editText12.Text = "";
+            editText12.RequestFocus();
+            inputMethodManager = (InputMethodManager)this.GetSystemService(Context.InputMethodService);
+            inputMethodManager.ShowSoftInput(editText12, 0);
+            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
         }
 
         public class Uni
