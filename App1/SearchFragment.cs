@@ -43,7 +43,6 @@ namespace App1
 
         public override void OnCreate(Bundle savedInstanceState)
         {
-            //SearchFragment mainFragment = new SearchFragment();
             base.OnCreate(savedInstanceState);
         }
 
@@ -60,7 +59,6 @@ namespace App1
             About.Click += AboutClick;
             listView1.ItemClick += GoToDetails;
             button1.Click += SearchButton;
-            //editText12.Touch += GoToDetails();
 
             return view;          
         }
@@ -73,23 +71,15 @@ namespace App1
         [Obsolete]
         private void AboutClick(object sender, EventArgs e)
         {
-            var transaction = Activity.SupportFragmentManager.BeginTransaction();
-            //About about = new About();
-            //about.Show(transaction, "About");
-            // fragment.Show(transaction, "First Fragment show");
-            //fragment.OnCreateView()
             var t = Activity.FragmentManager.BeginTransaction();
             About about2 = new About();
-            //controller.About(transaction);
             controller.About(t, about2);
-
-
         }
 
         public void GoToDetails(object sender, AdapterView.ItemClickEventArgs e)
         {
-            var trans = Activity.SupportFragmentManager.BeginTransaction();
-            controller.GoToDetails(listOfCountry, listOfUnivers, listOfWeb, e.Position, trans);
+            var transaction = Activity.SupportFragmentManager.BeginTransaction();
+            controller.GoToDetails(listOfCountry, listOfUnivers, listOfWeb, e.Position, transaction);
         }
 
         public void SearchButton(object sender, EventArgs e)

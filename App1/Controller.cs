@@ -21,8 +21,10 @@ namespace App1
 
         Stack<Android.Support.V4.App.Fragment> stack;
         List<string> listOfCountry;
-        List<string> listOfUnivers; List<string> listOfWeb;
+        List<string> listOfUnivers; 
+        List<string> listOfWeb;
         int position;
+
         Android.Support.V4.App.FragmentTransaction trans;
 
         public Controller(SearchFragment searchFr, DetailsFragment detailsFr, About aboutFr, CloseFragment closeFr, Stack<Android.Support.V4.App.Fragment> st)
@@ -38,18 +40,9 @@ namespace App1
         {
             tr.Add(Resource.Id.ContainerFrame, searchFragment);
             tr.Add(Resource.Id.ContainerFrame, detailsFragment);
-            //tr.Add(Resource.Id.ContainerFrame, aboutFragment);
-           // tr.Add(Resource.Id.ContainerFrame, closeFragment);
             tr.Hide(detailsFragment);
-            //tr.Hide(aboutFragment);
-            //tr.Hide(closeFragment);
             tr.Commit();
             stack.Push(searchFragment);
-        }
-
-        public void ChangeFragment()
-        {
-
         }
 
         public void GoToDetails(List<string> listOfCountry, List<string> listOfUnivers, List<string> listOfWeb, int position, Android.Support.V4.App.FragmentTransaction trans)
@@ -66,20 +59,10 @@ namespace App1
             web.Text = listOfWeb[position];
         }
 
-        internal void About(Android.Support.V4.App.FragmentTransaction t)
-        {
-            //t.Show(aboutFragment);
-            //t.Hide(detailsFragment);
-            //t.Hide(searchFragment);
-            //t.Commit();
-        }
-
         internal void BackPressed(Android.Support.V4.App.FragmentTransaction trans, FragmentTransaction trans2)
         {
             if (stack.Count == 1)
             {
-                //trans.Hide(searchFragment);
-                //trans.Commit();
                 trans2.Add(closeFragment, "");
                 trans2.Show(closeFragment);
                 trans2.Commit();
