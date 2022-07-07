@@ -13,120 +13,50 @@ using Newtonsoft.Json;
 using Android.Content;
 using Android.Views;
 using Android.Views.InputMethods;
+using Android.Util;
 
 namespace App1
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        Button button1;
-        EditText editText1;
-        EditText editText12;
-        TextView textMesage;
-        List<string> list;
-        List<string> listOfUnivers = new List<string>();
-        List<string> listOfCountry = new List<string>();
-        List<string> listOfWeb = new List<string>();
-
-        public int selectedPos;
-
-        ListView listView1;
-        TextView textUniver;
-        TextView textCountry;
-        TextView textWeb;
 
         public InputMethodManager inputMethodManager;
-
+        // Fragments 
+        SearchFragment searchFragment;
+        DetailsFragment detailsFragment;
+        About aboutFragment;
+        CloseFragment closeFragment;
+        //Stack and controller
+        Controller controller;
+        Stack<Android.Support.V4.App.Fragment> stack;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
-            button1 = FindViewById<Button>(Resource.Id.button1);
-            listView1 = FindViewById<ListView>(Resource.Id.listView1);
-            editText12 = FindViewById<EditText>(Resource.Id.editText12);
-            textMesage = FindViewById<TextView>(Resource.Id.textMesage);
+            stack = new Stack<Android.Support.V4.App.Fragment>();
+            searchFragment = new SearchFragment();
+            detailsFragment = new DetailsFragment();
+            aboutFragment = new About();
+            closeFragment = new CloseFragment();
+            controller = new Controller(searchFragment, detailsFragment, aboutFragment, closeFragment, stack);
+
+            var transaction = SupportFragmentManager.BeginTransaction();
+            
+            controller.AddAllFragments(transaction, stack);
+
+            searchFragment.SetController(controller);
 
             Window.SetSoftInputMode(SoftInput.StateHidden);
-            listView1.ItemClick += GoToDetails;
-            button1.Click += OnClickButton;
-            editText12.Touch += TextViewTouched;
         }
 
-        public void GoToDetails(object sender, AdapterView.ItemClickEventArgs e)
+        public override void OnBackPressed()
         {
-            SetContentView(Resource.Layout.content_main);
-            selectedPos = e.Position;
-            textCountry = FindViewById<TextView>(Resource.Id.textCountry);
-            textCountry.Text = listOfCountry[selectedPos];
-
-            textWeb = FindViewById<TextView>(Resource.Id.textWeb);
-            textWeb.Text = listOfWeb[selectedPos];
-
-            textUniver = FindViewById<TextView>(Resource.Id.textUniver);
-            textUniver.Text = listOfUnivers[selectedPos];
-        }
-
-        public void OnClickButton(object sender, EventArgs e)
-        {
-            listOfUnivers.Clear();
-            listOfCountry.Clear();
-            listOfWeb.Clear();
-            textMesage.Text = "";
-            if (editText12.Text != "")
-            {
-                string json = new WebClient().DownloadString("http://universities.hipolabs.com/search?country=" + editText12.Text);
-                var p = JsonConvert.DeserializeObject<List<Uni>>(json);
-                foreach (var i in p)
-                {
-                    listOfUnivers.Add(i.name);
-                    listOfCountry.Add(i.country);
-                    listOfWeb.Add(i.web_pages[0]);
-                }
-
-                if (listOfUnivers.Count > 0)
-                {
-                    listOfUnivers.Sort();
-                    listOfCountry.Sort();
-                    listOfWeb.Sort();
-                    ArrayAdapter<string> adapter = new ArrayAdapter<string>(this, Android.Resource.Layout.SimpleListItem1, listOfUnivers);
-                    listView1.Adapter = adapter;
-                }
-                else
-                {
-                    textMesage.Text = "Check spelling";
-                }
-
-
-            }
-            else
-            {
-                textMesage.Text = "No result, choose any country";
-            }
-
-        }
-
-        public void TextViewTouched(object sender, EventArgs e)
-        {
-
-            editText12.Text = "";
-            editText12.RequestFocus();
-            inputMethodManager = (InputMethodManager)this.GetSystemService(Context.InputMethodService);
-            inputMethodManager.ShowSoftInput(editText12, 0);
-            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
-        }
-
-        public class Uni
-        {
-            public List<string> domains { get; set; }
-            public List<string> web_pages { get; set; }
-
-            [JsonProperty("state-province")]
-            public object StateProvince { get; set; }
-            public string name { get; set; }
-            public string country { get; set; }
-            public string alpha_two_code { get; set; }
+            var transactionSupport = SupportFragmentManager.BeginTransaction();
+            var transaction = FragmentManager.BeginTransaction();
+            controller.BackPressed(transactionSupport, transaction);
         }
 
     }

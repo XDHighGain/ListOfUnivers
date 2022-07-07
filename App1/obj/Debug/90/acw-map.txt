@@ -1,6 +1,18 @@
+App1.CloseFragment, App1;crc64a7a6b04b89628087.CloseFragment
+App1.CloseFragment;crc64a7a6b04b89628087.CloseFragment
+app1.CloseFragment;crc64a7a6b04b89628087.CloseFragment
+App1.DetailsFragment, App1;crc64a7a6b04b89628087.DetailsFragment
+App1.DetailsFragment;crc64a7a6b04b89628087.DetailsFragment
+app1.DetailsFragment;crc64a7a6b04b89628087.DetailsFragment
 App1.MainActivity, App1;crc64a7a6b04b89628087.MainActivity
 App1.MainActivity;crc64a7a6b04b89628087.MainActivity
 app1.MainActivity;crc64a7a6b04b89628087.MainActivity
+App1.SearchFragment, App1;crc64a7a6b04b89628087.SearchFragment
+App1.SearchFragment;crc64a7a6b04b89628087.SearchFragment
+app1.SearchFragment;crc64a7a6b04b89628087.SearchFragment
+App1.About, App1;crc64a7a6b04b89628087.About
+App1.About;crc64a7a6b04b89628087.About
+app1.About;crc64a7a6b04b89628087.About
 Android.Support.V4.View.AsyncLayoutInflater+IOnInflateFinishedListenerImplementor, Xamarin.Android.Support.AsyncLayoutInflater;mono.android.support.v4.view.AsyncLayoutInflater_OnInflateFinishedListenerImplementor
 Android.Support.V4.View.AsyncLayoutInflater.IOnInflateFinishedListenerImplementor;mono.android.support.v4.view.AsyncLayoutInflater_OnInflateFinishedListenerImplementor
 mono.android.support.v4.view.AsyncLayoutInflater_OnInflateFinishedListenerImplementor;mono.android.support.v4.view.AsyncLayoutInflater_OnInflateFinishedListenerImplementor
