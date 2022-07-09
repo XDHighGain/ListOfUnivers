@@ -61,6 +61,7 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseFragment.cs" />
     <Compile Include="CloseFragment.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="DetailsFragment.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="About.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

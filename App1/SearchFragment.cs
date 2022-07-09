@@ -18,28 +18,25 @@ using Android.InputMethodServices;
 
 namespace App1
 {
-    public class SearchFragment : Android.Support.V4.App.Fragment
+    public class SearchFragment : BaseFragment
     {
         Button button1;
-        EditText editText1;
         EditText editText12;
-        TextView textMesage;
-        List<string> list;
+        TextView _textMesage;
+
         List<string> listOfUnivers = new List<string>();
         List<string> listOfCountry = new List<string>();
         List<string> listOfWeb = new List<string>();
         public InputMethodManager inputMethodManager;
         public int selectedPos;
 
-        public Controller controller;
+        ListView _listUnivers;
+        ArrayAdapter<string> adapter;
 
-        ListView listView1;
-        TextView textUniver;
-        TextView textCountry;
-        TextView textWeb;
-        TextView About;
-
-        public View view;
+        protected override int FragmentId
+        {
+            get => Resource.Layout.searchFragment;
+        }
 
         public override void OnCreate(Bundle savedInstanceState)
         {
@@ -48,38 +45,26 @@ namespace App1
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            view = inflater.Inflate(Resource.Layout.searchFragment, container, false);
-
+            var view = base.OnCreateView(inflater, container, savedInstanceState);
             button1 = view.FindViewById<Button>(Resource.Id.button1);
-            listView1 = view.FindViewById<ListView>(Resource.Id.listOfUnivers);
+            _listUnivers = view.FindViewById<ListView>(Resource.Id.listOfUnivers);
             editText12 = view.FindViewById<EditText>(Resource.Id.editText12);
-            textMesage = view.FindViewById<TextView>(Resource.Id.textMesage);
-            About = view.FindViewById<TextView>(Resource.Id.About);
-
-            About.Click += AboutClick;
-            listView1.ItemClick += GoToDetails;
+            _textMesage = view.FindViewById<TextView>(Resource.Id.textMesage);
+            _listUnivers.ItemClick += GoToDetails;
             button1.Click += SearchButton;
 
             return view;          
         }
 
-        public void SetController(Controller contr)
-        {
-            controller = contr;
-        }
-
-        [Obsolete]
-        private void AboutClick(object sender, EventArgs e)
-        {
-            var t = Activity.FragmentManager.BeginTransaction();
-            About about2 = new About();
-            controller.About(t, about2);
-        }
 
         public void GoToDetails(object sender, AdapterView.ItemClickEventArgs e)
         {
-            var transaction = Activity.SupportFragmentManager.BeginTransaction();
-            controller.GoToDetails(listOfCountry, listOfUnivers, listOfWeb, e.Position, transaction);
+            TestDetails testDetails = new TestDetails();
+            testDetails.Univer = listOfUnivers[e.Position];
+            testDetails.Country = listOfCountry[e.Position];
+            testDetails.Web = listOfWeb[e.Position];
+
+            Controller.NavigateTo(testDetails);
         }
 
         public void SearchButton(object sender, EventArgs e)
@@ -87,7 +72,7 @@ namespace App1
             listOfUnivers.Clear();
             listOfCountry.Clear();
             listOfWeb.Clear();
-            textMesage.Text = "";
+            _textMesage.Text = "";
             if (editText12.Text != "")
             {
                 string json = new WebClient().DownloadString("http://universities.hipolabs.com/search?country=" + editText12.Text);
@@ -103,17 +88,17 @@ namespace App1
                     listOfUnivers.Sort();
                     listOfCountry.Sort();
                     listOfWeb.Sort();
-                    ArrayAdapter<string> adapter = new ArrayAdapter<string>( view.Context , Android.Resource.Layout.SimpleListItem1, listOfUnivers);
-                    listView1.Adapter = adapter;
+                    adapter = new ArrayAdapter<string>( base.Context , Android.Resource.Layout.SimpleListItem1, listOfUnivers);
+                    _listUnivers.Adapter = adapter;
                 }
                 else
                 {
-                    textMesage.Text = "Check spelling";
+                    _textMesage.Text = "Check spelling";
                 }
             }
             else
             {
-                textMesage.Text = "No result, choose any country";
+                _textMesage.Text = "No result, choose any country";
             }
         }
 

@@ -10,77 +10,62 @@ using System.Linq;
 using System.Text;
 using Xamarin.Android;
 using Xamarin;
+using FragmentManager = Android.Support.V4.App.FragmentManager;
 namespace App1
 {
     public class Controller
     {
-        SearchFragment searchFragment;
-        DetailsFragment detailsFragment;
-        About aboutFragment;
-        CloseFragment closeFragment;
 
-        Stack<Android.Support.V4.App.Fragment> stack;
-        List<string> listOfCountry;
-        List<string> listOfUnivers; 
-        List<string> listOfWeb;
-        int position;
-
-        Android.Support.V4.App.FragmentTransaction trans;
-
-        public Controller(SearchFragment searchFr, DetailsFragment detailsFr, About aboutFr, CloseFragment closeFr, Stack<Android.Support.V4.App.Fragment> st)
+        public Stack<BaseFragment> _stack;
+        private FragmentManager _manager;
+        private int _containerId;
+        private bool _backFlag;
+        public Controller(FragmentManager manager, int containerId)
         {
-            searchFragment = searchFr;
-            detailsFragment = detailsFr;
-            aboutFragment = aboutFr;
-            closeFragment = closeFr;
-            stack = st;
+            _stack = new Stack<BaseFragment>();
+            _manager = manager;
+            _containerId = containerId;
         }
 
-        public void AddAllFragments(Android.Support.V4.App.FragmentTransaction tr, Stack<Android.Support.V4.App.Fragment> st)
-        {
-            tr.Add(Resource.Id.ContainerFrame, searchFragment);
-            tr.Add(Resource.Id.ContainerFrame, detailsFragment);
-            tr.Hide(detailsFragment);
-            tr.Commit();
-            stack.Push(searchFragment);
-        }
 
-        public void GoToDetails(List<string> listOfCountry, List<string> listOfUnivers, List<string> listOfWeb, int position, Android.Support.V4.App.FragmentTransaction trans)
+        public void NavigateTo(BaseFragment fragment)
         {
-            trans.Show(detailsFragment);
-            trans.Hide(searchFragment);
-            trans.Commit();
-            stack.Push(detailsFragment);
-            var uni = detailsFragment.View.FindViewById<TextView>(Resource.Id.textUniver);
-            uni.Text = listOfUnivers[position];
-            var country = detailsFragment.View.FindViewById<TextView>(Resource.Id.textCountry);
-            country.Text = listOfCountry[position];
-            var web = detailsFragment.View.FindViewById<TextView>(Resource.Id.textWeb);
-            web.Text = listOfWeb[position];
-        }
-
-        internal void BackPressed(Android.Support.V4.App.FragmentTransaction trans, FragmentTransaction trans2)
-        {
-            if (stack.Count == 1)
+            if (_backFlag == false)
             {
-                trans2.Add(closeFragment, "");
-                trans2.Show(closeFragment);
-                trans2.Commit();
-
+                _stack.Push(fragment);
+                fragment.SetController(this);
+                var trans = _manager.BeginTransaction();
+                trans.Add(_containerId, fragment, "");
+                foreach (var i in _stack)
+                {
+                    trans.Hide(i);
+                }
+                trans.Show(fragment);
+                trans.Commit();
+                _backFlag = false;
             }
             else
             {
-                //go to previous fragment in stack
-                trans.Hide(stack.Pop());
-                trans.Show(stack.Peek());
+                fragment.SetController(this);
+                var trans = _manager.BeginTransaction();
+                trans.Remove(fragment);
+                _stack.Pop();
+                foreach (var i in _stack)
+                {
+                    trans.Hide(i);
+                }
+                trans.Show(_stack.Peek());
+             
                 trans.Commit();
+                _backFlag = false;
             }
         }
 
-        internal void About(FragmentTransaction t, About about2)
+        public void GoBack()
         {
-            t.Add(about2, "");
-            t.Commit();
+            _backFlag = true;
+            NavigateTo(_stack.Peek());
         }
+
     }
 }

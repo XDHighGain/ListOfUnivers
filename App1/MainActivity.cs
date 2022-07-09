@@ -20,15 +20,9 @@ namespace App1
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
-        // Fragments 
-        SearchFragment searchFragment;
-        DetailsFragment detailsFragment;
-        About aboutFragment;
-        CloseFragment closeFragment;
 
-        //Stack and controller
+
         Controller controller;
-        Stack<Android.Support.V4.App.Fragment> stack;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -36,31 +30,27 @@ namespace App1
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.activity_main);
 
-            Initialize();
+            var manager = SupportFragmentManager;
 
-            var transaction = SupportFragmentManager.BeginTransaction();
-            controller.AddAllFragments(transaction, stack);
-            searchFragment.SetController(controller);
+            controller = new Controller(manager, Resource.Id.ContainerFrame);
+            controller.NavigateTo(new SearchFragment());
 
             Window.SetSoftInputMode(SoftInput.StateHidden);
         }
 
         public override void OnBackPressed()
         {
-            var transactionSupport = SupportFragmentManager.BeginTransaction();
-            var transaction = FragmentManager.BeginTransaction();
-            controller.BackPressed(transactionSupport, transaction);
+            if (controller._stack.Count == 1)
+            {
+                base.OnBackPressed();
+            }
+            else
+            {
+                controller.GoBack();
+            }
+            
         }
 
-        public void Initialize()
-        {
-            stack = new Stack<Android.Support.V4.App.Fragment>();
-            searchFragment = new SearchFragment();
-            detailsFragment = new DetailsFragment();
-            aboutFragment = new About();
-            closeFragment = new CloseFragment();
-            controller = new Controller(searchFragment, detailsFragment, aboutFragment, closeFragment, stack);
-        }
-
+      
     }
 }
